@@ -19,7 +19,7 @@ abstract class AbstractDefinitionCompatibilityTest extends \PHPUnit_Framework_Te
      */
     abstract protected function getContainer(DefinitionProviderInterface $definitionProvider);
 
-    public function testInstanceConverter()
+    public function testInstance()
     {
         $referenceDefinition = new \Assembly\ObjectDefinition('foo', '\\stdClass');
 
@@ -59,7 +59,7 @@ abstract class AbstractDefinitionCompatibilityTest extends \PHPUnit_Framework_Te
     /**
      * Test method calls and property assignments
      */
-    public function testInstanceConverterPropertiesAndMethodCalls()
+    public function testInstancePropertiesAndMethodCalls()
     {
         $assemblyDefinition = new \Assembly\ObjectDefinition('bar', 'Interop\Container\Definition\Test\Fixtures\\Test');
         $assemblyDefinition->addMethodCall('setArg1', 42);
@@ -75,7 +75,7 @@ abstract class AbstractDefinitionCompatibilityTest extends \PHPUnit_Framework_Te
         $this->assertEquals(43, $result->cArg2);
     }
 
-    public function testParameterConverter()
+    public function testParameter()
     {
         $assemblyDefinition = new \Assembly\ParameterDefinition('foo', '42');
 
@@ -87,7 +87,7 @@ abstract class AbstractDefinitionCompatibilityTest extends \PHPUnit_Framework_Te
         $this->assertEquals(42, $result);
     }
 
-    public function testAliasConverter()
+    public function testAlias()
     {
         $aliasDefinition = new \Assembly\AliasDefinition('foo', 'bar');
 
@@ -103,7 +103,7 @@ abstract class AbstractDefinitionCompatibilityTest extends \PHPUnit_Framework_Te
         $this->assertTrue($result === $result2);
     }
 
-    public function testFactoryConverter()
+    public function testFactory()
     {
         $factoryAssemblyDefinition = new \Assembly\ObjectDefinition('factory', 'Interop\Container\Definition\Test\Fixtures\\TestFactory');
         $factoryAssemblyDefinition->addConstructorArgument(42);
@@ -123,7 +123,7 @@ abstract class AbstractDefinitionCompatibilityTest extends \PHPUnit_Framework_Te
     /**
      * @expectedException \RuntimeException
      */
-    public function testUnsupportedDefinitionConverter()
+    public function testUnsupportedDefinition()
     {
         $definition = new UnsupportedDefinition();
 
@@ -132,4 +132,30 @@ abstract class AbstractDefinitionCompatibilityTest extends \PHPUnit_Framework_Te
         ]));
         $container->get('foo');
     }
+
+    public function testRecursiveArrayParameters()
+    {
+        $referenceDefinition = new \Assembly\ObjectDefinition('foo', '\\stdClass');
+
+        $assemblyDefinition = new \Assembly\ObjectDefinition('bar', 'Interop\Container\Definition\Test\Fixtures\\Test');
+        $assemblyDefinition->addConstructorArgument(42);
+        $assemblyDefinition->addConstructorArgument([
+            'recursive' => [
+                'hello' => 'world',
+                'foo' => new Reference('foo'),
+            ]
+        ]);
+
+        $container = $this->getContainer(new ArrayDefinitionProvider([
+            'bar' => $assemblyDefinition,
+            'foo' => $referenceDefinition,
+        ]));
+        $result = $container->get('bar');
+
+        $this->assertInstanceOf('Interop\Container\Definition\Test\Fixtures\\Test', $result);
+        $this->assertEquals(42, $result->cArg1);
+        $this->assertEquals('world', $result->cArg2['recursive']['hello']);
+        $this->assertInstanceOf('stdClass', $result->cArg2['recursive']['foo']);
+    }
+
 }
