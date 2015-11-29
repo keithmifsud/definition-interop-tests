@@ -1,0 +1,19 @@
+{
+    "name": "container-interop/definition-interop-compiler-test-suite",
+    "type": "library",
+    "description": "This package contains a test suite that can be used to ensure that a container/compiler is indeed compatible with definition-interop.",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Interop\\Container\\Definition\\Test\\": "src/"
+        }
+    },
+    "require": {
+        "container-interop/definition-interop": "~0.1.0",
+        "container-interop/container-interop": "^1.0",
+        "mnapoli/assembly": "~0.1.0",
+        "phpunit/phpunit": "~4.5 | ~5.0"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
