@@ -21,9 +21,9 @@ abstract class AbstractDefinitionCompatibilityTest extends \PHPUnit_Framework_Te
 
     public function testInstance()
     {
-        $referenceDefinition = new \Assembly\ObjectDefinition('foo', '\\stdClass');
+        $referenceDefinition = new \Assembly\ObjectDefinition('\\stdClass');
 
-        $assemblyDefinition = new \Assembly\ObjectDefinition('bar', 'Interop\Container\Definition\Test\Fixtures\\Test');
+        $assemblyDefinition = new \Assembly\ObjectDefinition('Interop\Container\Definition\Test\Fixtures\\Test');
         $assemblyDefinition->addConstructorArgument(42);
         $assemblyDefinition->addConstructorArgument(['hello' => 'world', 'foo' => new Reference('foo'), 'fooDirect' => $referenceDefinition]);
 
@@ -48,7 +48,7 @@ abstract class AbstractDefinitionCompatibilityTest extends \PHPUnit_Framework_Te
      */
     public function testParameterException()
     {
-        $assemblyDefinition = new \Assembly\ObjectDefinition('foo', 'Interop\Container\Definition\Test\Fixtures\\Test');
+        $assemblyDefinition = new \Assembly\ObjectDefinition('Interop\Container\Definition\Test\Fixtures\\Test');
         $assemblyDefinition->addConstructorArgument(new \stdClass());
 
         $this->getContainer(new ArrayDefinitionProvider([
@@ -61,7 +61,7 @@ abstract class AbstractDefinitionCompatibilityTest extends \PHPUnit_Framework_Te
      */
     public function testInstancePropertiesAndMethodCalls()
     {
-        $assemblyDefinition = new \Assembly\ObjectDefinition('bar', 'Interop\Container\Definition\Test\Fixtures\\Test');
+        $assemblyDefinition = new \Assembly\ObjectDefinition('Interop\Container\Definition\Test\Fixtures\\Test');
         $assemblyDefinition->addMethodCall('setArg1', 42);
         $assemblyDefinition->addPropertyAssignment('cArg2', 43);
 
@@ -77,7 +77,7 @@ abstract class AbstractDefinitionCompatibilityTest extends \PHPUnit_Framework_Te
 
     public function testParameter()
     {
-        $assemblyDefinition = new \Assembly\ParameterDefinition('foo', '42');
+        $assemblyDefinition = new \Assembly\ParameterDefinition('42');
 
         $container = $this->getContainer(new ArrayDefinitionProvider([
             'foo' => $assemblyDefinition,
@@ -89,9 +89,9 @@ abstract class AbstractDefinitionCompatibilityTest extends \PHPUnit_Framework_Te
 
     public function testAlias()
     {
-        $aliasDefinition = new \Assembly\AliasDefinition('foo', 'bar');
+        $aliasDefinition = new \Assembly\Reference('bar');
 
-        $assemblyDefinition = new \Assembly\ObjectDefinition('bar', 'Interop\Container\Definition\Test\Fixtures\\Test');
+        $assemblyDefinition = new \Assembly\ObjectDefinition('Interop\Container\Definition\Test\Fixtures\\Test');
 
         $container = $this->getContainer(new ArrayDefinitionProvider([
             'bar' => $assemblyDefinition,
@@ -105,10 +105,10 @@ abstract class AbstractDefinitionCompatibilityTest extends \PHPUnit_Framework_Te
 
     public function testFactory()
     {
-        $factoryAssemblyDefinition = new \Assembly\ObjectDefinition('factory', 'Interop\Container\Definition\Test\Fixtures\\TestFactory');
+        $factoryAssemblyDefinition = new \Assembly\ObjectDefinition('Interop\Container\Definition\Test\Fixtures\\TestFactory');
         $factoryAssemblyDefinition->addConstructorArgument(42);
 
-        $assemblyDefinition = new \Assembly\FactoryCallDefinition('test', new Reference('factory'), 'getTest');
+        $assemblyDefinition = new \Assembly\FactoryCallDefinition(new Reference('factory'), 'getTest');
 
         $container = $this->getContainer(new ArrayDefinitionProvider([
             'factory' => $factoryAssemblyDefinition,
@@ -135,9 +135,9 @@ abstract class AbstractDefinitionCompatibilityTest extends \PHPUnit_Framework_Te
 
     public function testRecursiveArrayParameters()
     {
-        $referenceDefinition = new \Assembly\ObjectDefinition('foo', '\\stdClass');
+        $referenceDefinition = new \Assembly\ObjectDefinition('\\stdClass');
 
-        $assemblyDefinition = new \Assembly\ObjectDefinition('bar', 'Interop\Container\Definition\Test\Fixtures\\Test');
+        $assemblyDefinition = new \Assembly\ObjectDefinition('Interop\Container\Definition\Test\Fixtures\\Test');
         $assemblyDefinition->addConstructorArgument(42);
         $assemblyDefinition->addConstructorArgument([
             'recursive' => [
@@ -157,5 +157,4 @@ abstract class AbstractDefinitionCompatibilityTest extends \PHPUnit_Framework_Te
         $this->assertEquals('world', $result->cArg2['recursive']['hello']);
         $this->assertInstanceOf('stdClass', $result->cArg2['recursive']['foo']);
     }
-
 }

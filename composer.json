@@ -9,9 +9,9 @@
         }
     },
     "require": {
-        "container-interop/definition-interop": "~0.1.0",
+        "container-interop/definition-interop": "~0.2.0",
         "container-interop/container-interop": "^1.0",
-        "mnapoli/assembly": "~0.1.0",
+        "mnapoli/assembly": "dev-master",
         "phpunit/phpunit": "~4.5 | ~5.0"
     },
     "minimum-stability": "dev",
