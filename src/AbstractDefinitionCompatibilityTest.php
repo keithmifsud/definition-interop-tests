@@ -44,7 +44,7 @@ abstract class AbstractDefinitionCompatibilityTest extends \PHPUnit_Framework_Te
      * Invalid objects (objects not extending one of the xxxDefinitionInterface interfaces) should trigger
      * an exception.
      *
-     * @expectedException \RuntimeException
+     * @expectedException \Exception
      */
     public function testParameterException()
     {
@@ -121,7 +121,7 @@ abstract class AbstractDefinitionCompatibilityTest extends \PHPUnit_Framework_Te
     }
 
     /**
-     * @expectedException \RuntimeException
+     * @expectedException \Exception
      */
     public function testUnsupportedDefinition()
     {
