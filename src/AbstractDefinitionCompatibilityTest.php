@@ -2,7 +2,6 @@
 
 namespace Interop\Container\Definition\Test;
 
-use Interop\Container\Definition\Test\ArrayDefinitionProvider;
 use Assembly\Reference;
 use Interop\Container\ContainerInterface;
 use Interop\Container\Definition\DefinitionProviderInterface;
@@ -38,22 +37,6 @@ abstract class AbstractDefinitionCompatibilityTest extends \PHPUnit_Framework_Te
         $this->assertEquals('world', $result->cArg2['hello']);
         $this->assertInstanceOf('stdClass', $result->cArg2['foo']);
         $this->assertInstanceOf('stdClass', $result->cArg2['fooDirect']);
-    }
-
-    /**
-     * Invalid objects (objects not extending one of the xxxDefinitionInterface interfaces) should trigger
-     * an exception.
-     *
-     * @expectedException \Exception
-     */
-    public function testParameterException()
-    {
-        $assemblyDefinition = new \Assembly\ObjectDefinition('Interop\Container\Definition\Test\Fixtures\\Test');
-        $assemblyDefinition->addConstructorArgument(new \stdClass());
-
-        $this->getContainer(new ArrayDefinitionProvider([
-            'bar' => $assemblyDefinition
-        ]));
     }
 
     /**
