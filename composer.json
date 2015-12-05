@@ -1,7 +1,7 @@
 {
-    "name": "container-interop/definition-interop-compiler-test-suite",
+    "name": "container-interop/definition-interop-tests",
     "type": "library",
-    "description": "This package contains a test suite that can be used to ensure that a container/compiler is indeed compatible with definition-interop.",
+    "description": "Test suite that validates whether a container is compatible with definition-interop.",
     "license": "MIT",
     "autoload": {
         "psr-4": {
