@@ -2,7 +2,7 @@
 
 namespace Interop\Container\Definition\Test;
 
-use Interop\Container\Definition\Test\ArrayDefinitionProvider;
+use Assembly\ParameterDefinition;
 use Assembly\Reference;
 use Interop\Container\ContainerInterface;
 use Interop\Container\Definition\DefinitionProviderInterface;
@@ -133,7 +133,7 @@ abstract class AbstractDefinitionCompatibilityTest extends \PHPUnit_Framework_Te
         $container->get('foo');
     }
 
-    public function testRecursiveArrayParameters()
+    public function testRecursiveArrayObjectArguments()
     {
         $referenceDefinition = new \Assembly\ObjectDefinition('\\stdClass');
 
@@ -156,5 +156,28 @@ abstract class AbstractDefinitionCompatibilityTest extends \PHPUnit_Framework_Te
         $this->assertEquals(42, $result->cArg1);
         $this->assertEquals('world', $result->cArg2['recursive']['hello']);
         $this->assertInstanceOf('stdClass', $result->cArg2['recursive']['foo']);
+    }
+
+    /**
+     * Check that sub-definitions are resolved in parameters, recursively.
+     */
+    public function testParametersContainingSubDefinitions()
+    {
+        $container = $this->getContainer(new ArrayDefinitionProvider([
+            'foo' => 'bar',
+            'parameter' => new ParameterDefinition([
+                'abc' => new Reference('foo'),
+            ]),
+            'recursive' => new ParameterDefinition([
+                'abc' => [
+                    'def' => new Reference('foo'),
+                ]
+            ]),
+        ]));
+
+        $result = $container->get('parameter');
+        $this->assertEquals('bar', $result['abc']);
+        $result = $container->get('recursive');
+        $this->assertEquals('bar', $result['abc']['def']);
     }
 }
