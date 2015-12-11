@@ -164,7 +164,6 @@ abstract class AbstractDefinitionCompatibilityTest extends \PHPUnit_Framework_Te
     public function testParametersContainingSubDefinitions()
     {
         $container = $this->getContainer(new ArrayDefinitionProvider([
-            'foo' => 'bar',
             'parameter' => new ParameterDefinition([
                 'abc' => new Reference('foo'),
             ]),
