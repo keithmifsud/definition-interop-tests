@@ -6,6 +6,12 @@ Modules (aka packages or bundles) are widespread in modern frameworks. Unfortuna
 
 This package contains a set of test suites that can be used to ensure that a container/compiler is indeed compatible with definition-interop.
 
+## Installation
+
+```
+composer require --dev container-interop/definition-interop-tests:dev-master
+```
+
 ## How does it work?
 
 This package contains a number of definition instances, and the associated PHPUnit tests that should match those instances.
